@@ -1,5 +1,10 @@
 # .
 
+Source :
+
+- https://github.com/bradtraversy/vue-crash-2024
+- https://www.youtube.com/watch?v=VeNfHj6MhgA
+
 This template should help get you started developing with Vue 3 in Vite.
 
 ## Recommended IDE Setup
