@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { defineProps } from "vue";
-
+// definging props for the Hero component
+// This component is used to display the hero section of the page
+// It includes a title and a subtitle
 defineProps({
   title: {
     type: String,
