@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { defineProps, ref, computed } from "vue";
+
 interface Job {
   type: string;
   title: string;
@@ -7,11 +9,10 @@ interface Job {
   location: string;
   id: number;
 }
-
 // Define props with TypeScript using defineProps
 // The job prop is expected to be of type Job (interface defined above)
 // This syntax is specific to Vue 3's script setup
-defineProps<{
+const props = defineProps<{
   job: Job;
 }>();
 
@@ -25,6 +26,29 @@ defineProps<{
 // and we can also use TypeScript to define the type of the props.
 // This is a new feature in Vue 3 that makes it easier to work with TypeScript
 // and props.
+
+const showFullDescription = ref(false);
+
+const toggleFullDescription = () => {
+  showFullDescription.value = !showFullDescription.value;
+};
+/*
+ * Computed properties in Vue are like "smart variables" that automatically update
+ * when their dependencies change. They:
+ * 1. Cache their results until a dependency changes
+ * 2. Only recalculate when needed (reactive)
+ * 3. Are perfect for transforming or filtering data
+ *
+ * In this case, this computed property watches props.job.description and
+ * showFullDescription, and updates the truncated text whenever they change.
+ */
+const truncatedDescription = computed(() => {
+  let description = props.job.description;
+  if (!showFullDescription.value) {
+    description = description.substring(0, 90) + "...";
+  }
+  return description;
+});
 </script>
 
 <template>
@@ -36,7 +60,13 @@ defineProps<{
       </div>
 
       <div class="mb-5">
-        {{ job.description }}
+        <div>{{ truncatedDescription }}</div>
+        <button
+          @click="toggleFullDescription"
+          class="text-green-500 hover:text-green-600 mb-5"
+        >
+          {{ showFullDescription ? "Less" : "More" }}
+        </button>
       </div>
 
       <h3 class="text-green-500 mb-2">{{ job.salary }}</h3>
