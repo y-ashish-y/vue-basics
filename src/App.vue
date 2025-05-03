@@ -14,6 +14,8 @@ const status = ref("active");
 const tasks = ref(["TaskOne", "TaskTwo", "TaskThree"]);
 const link = ref("https://google.com");
 
+const newTask = ref("");
+
 const toggleStatus = () => {
   if (status.value === "active") {
     status.value = "pending";
@@ -23,6 +25,13 @@ const toggleStatus = () => {
     status.value = "active";
   }
 };
+
+const addTask = () => {
+  if (newTask.value.trim() !== "") {
+    tasks.value.push(newTask.value);
+    newTask.value = ""; // Clear the input field after adding the task
+  }
+};
 </script>
 
 <template>
@@ -30,7 +39,12 @@ const toggleStatus = () => {
   <p v-if="status === 'active'">User is active</p>
   <p v-else-if="status === 'pending'">User is pending</p>
   <p v-else>User is inactive</p>
-
+  <form @submit.prevent="addTask">
+    <label for="task">Add Task</label>
+    <input type="text" id="task" v-model="newTask" />
+    <!-- V-model lets us binds inputs to the variables -->
+    <button type="submit">Submit</button>
+  </form>
   <h3>Tasks</h3>
   <ul>
     <li v-for="task in tasks" :key="task">{{ task }}</li>
