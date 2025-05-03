@@ -6,6 +6,10 @@ import JobListingSingular from "@/components/JobListingSingular.vue";
 const jobs = ref(JobData);
 // when using ref, we need to use .value to access the value
 console.log(jobs.value);
+
+defineProps<{
+  limit: number;
+}>();
 </script>
 
 <template>
@@ -16,7 +20,11 @@ console.log(jobs.value);
         Browse Jobs
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <JobListingSingular v-for="job in jobs" :key="job.id" :job="job" />
+        <JobListingSingular
+          v-for="job in jobs.splice(0, limit)"
+          :key="job.id"
+          :job="job"
+        />
       </div>
     </div>
   </section>
