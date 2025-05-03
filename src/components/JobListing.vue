@@ -7,8 +7,14 @@ const jobs = ref(JobData);
 // when using ref, we need to use .value to access the value
 console.log(jobs.value);
 
+interface showButton {
+  type: boolean;
+  default: boolean;
+}
+
 defineProps<{
   limit: number;
+  showButton: showButton["type"];
 }>();
 </script>
 
@@ -27,5 +33,12 @@ defineProps<{
         />
       </div>
     </div>
+  </section>
+  <section v-if="showButton" class="m-auto max-w-lg my-10 px-6">
+    <a
+      href="jobs.html"
+      class="block bg-black text-white text-center py-4 px-6 rounded-xl hover:bg-gray-700"
+      >View All Jobs</a
+    >
   </section>
 </template>
