@@ -1,7 +1,7 @@
 <!-- Options API example used in version2 -->
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 
 // Composition API example used in version3
 // ref() is a function that creates a reactive reference to a value.
@@ -36,6 +36,19 @@ const addTask = () => {
 const deleteTask = (index: number) => {
   tasks.value.splice(index, 1);
 };
+onMounted(async () => {
+  // This lifecycle hook is called after the component has been mounted.
+  // You can perform any setup or data fetching here.
+  console.log("Component mounted");
+  try {
+    const response = await fetch("https://jsonplaceholder.typicode.com/todos");
+    const data = await response.json();
+    tasks.value = data.map((task: { title: string }) => task.title);
+    // console.log(data);
+  } catch (error) {
+    console.log("Error fetching Data");
+  }
+});
 </script>
 
 <template>
