@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import JobData from "@/jobs.json";
-import { ref } from "vue";
+// import JobData from "@/jobs.json";
+import { onMounted, ref } from "vue";
 import JobListingSingular from "@/components/JobListingSingular.vue";
+import axios from "axios";
 
-const jobs = ref(JobData);
+const jobs = ref([]);
 // when using ref, we need to use .value to access the value
 console.log(jobs.value);
 
@@ -16,6 +17,16 @@ defineProps<{
   limit: number;
   showButton: showButton["type"];
 }>();
+
+onMounted(async () => {
+  // Fetch the job data from the JSON file
+  try {
+    const response = await axios.get("http://localhost:3000/jobs");
+    jobs.value = response.data;
+  } catch (error) {
+    console.error("Error fetching job data:", error);
+  }
+});
 </script>
 
 <template>
