@@ -1,12 +1,23 @@
 <script setup lang="ts">
 // import JobData from "@/jobs.json";
-import { onMounted, ref } from "vue";
+import { onMounted, reactive } from "vue";
 import JobListingSingular from "@/components/JobListingSingular.vue";
 import axios from "axios";
 
-const jobs = ref([]);
-// when using ref, we need to use .value to access the value
-console.log(jobs.value);
+// const jobs = ref([]);
+// // when using ref, we need to use .value to access the value
+// console.log(jobs.value);
+
+// ref vs reactive
+
+// reactive() only takes objects. It does not take primitives like strings, numbers and booleans. It uses ref() under the hood.
+// ref() can take objects or primitives.
+// ref() has a .value property for reassigning, reactive() doesn't use .value and can't be reassigned
+
+const state = reactive({
+  jobs: [],
+  isLoading: true,
+});
 
 interface showButton {
   type: boolean;
@@ -21,10 +32,12 @@ defineProps<{
 onMounted(async () => {
   // Fetch the job data from the JSON file
   try {
-    const response = await axios.get("http://localhost:3000/jobs");
-    jobs.value = response.data;
+    const response = await axios.get("http://localhost:5000/jobs");
+    state.jobs = response.data;
   } catch (error) {
     console.error("Error fetching job data:", error);
+  } finally {
+    state.isLoading = false;
   }
 });
 </script>
@@ -38,7 +51,7 @@ onMounted(async () => {
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <JobListingSingular
-          v-for="job in jobs.splice(0, limit)"
+          v-for="job in state.jobs.splice(0, limit || state.jobs.length)"
           :key="job.id"
           :job="job"
         />
